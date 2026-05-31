@@ -1,0 +1,13 @@
+{
+  "name": "schema-firewall-proxy",
+  "version": "0.1.0",
+  "description": "HTTP proxy that enforces JSON schemas on LLM responses — drop-in OpenAI-compatible endpoint",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

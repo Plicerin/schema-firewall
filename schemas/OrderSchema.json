@@ -1,0 +1,12 @@
+{
+  "$id": "OrderSchema",
+  "type": "object",
+  "properties": {
+    "item":        { "type": "string" },
+    "quantity":    { "type": "integer" },
+    "price_cents": { "type": "integer" },
+    "notes":       { "type": "string" }
+  },
+  "required": ["item", "quantity", "price_cents"],
+  "additionalProperties": false
+}
