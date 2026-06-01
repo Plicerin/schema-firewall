@@ -78,8 +78,11 @@ function extractJson(text) {
 
 // ── Upstream call ────────────────────────────────────────────────────────────
 
+const STRIP_PREFIX = process.env.SCHEMA_FIREWALL_STRIP_PREFIX ?? '';
+
 async function callUpstream(path, method, headers, body) {
-  const url = `${UPSTREAM}${path}`;
+  const strippedPath = STRIP_PREFIX && path.startsWith(STRIP_PREFIX) ? path.slice(STRIP_PREFIX.length) : path;
+  const url = `${UPSTREAM}${strippedPath}`;
   const res = await fetch(url, {
     method,
     headers: {
@@ -87,6 +90,8 @@ async function callUpstream(path, method, headers, body) {
       'Authorization': headers['authorization'] ?? '',
       'OpenAI-Organization': headers['openai-organization'] ?? '',
       ...(headers['anthropic-version'] ? { 'anthropic-version': headers['anthropic-version'] } : {}),
+      ...(headers['editor-version'] ? { 'Editor-Version': headers['editor-version'] } : {}),
+      ...(headers['copilot-integration-id'] ? { 'Copilot-Integration-Id': headers['copilot-integration-id'] } : {}),
     },
     body,
   });
