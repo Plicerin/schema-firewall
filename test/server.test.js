@@ -100,7 +100,10 @@ async function launchProxy(upstreamPort, { mode = 'coerce', maxRetries = 2 } = {
       data = c.data; coercions = c.coercions;
     }
     const { valid, errors } = validate(data, schema);
-    if (valid) return { status: coercions.length ? 'coerced' : 'ok', data, errors: [], coercions, retries: retryCount, completion: comp };
+    if (valid) {
+      const status = retryCount > 0 ? 'retried' : (coercions.length ? 'coerced' : 'ok');
+      return { status, data, errors: [], coercions, retries: retryCount, completion: comp };
+    }
 
     if (retryCount < maxRetries) {
       const msgs = [...bodyObj.messages,
@@ -239,7 +242,7 @@ describe('proxy HTTP', () => {
     proxy.server.close(); mock.server.close();
   });
 
-  it('retries and succeeds on second upstream call', async () => {
+  it('retries and succeeds on second upstream call with retried status', async () => {
     const mock = await makeMockUpstream([
       { body: completion({ item: 'Widget' }) },                                    // bad: missing fields
       { body: completion({ item: 'Widget', quantity: 3, price_cents: 100 }) },    // good
@@ -251,7 +254,7 @@ describe('proxy HTTP', () => {
       body: JSON.stringify({ model: 'gpt-4o', messages: [{ role: 'user', content: 'order?' }] }),
     });
     assert.equal(r.status, 200);
-    assert.equal(r.headers.get('x-schema-firewall-status'), 'ok');
+    assert.equal(r.headers.get('x-schema-firewall-status'), 'retried');
     assert.equal(r.headers.get('x-schema-firewall-retries'), '1');
     proxy.server.close(); mock.server.close();
   });

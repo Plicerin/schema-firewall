@@ -261,7 +261,7 @@ Final returned content:
 Proxy detected an invalid response, retried upstream with schema errors injected, and returned a repaired result:
 
 - `httpStatus: 200`
-- `X-Schema-Firewall-Status: coerced`
+- `X-Schema-Firewall-Status: retried`
 - `X-Schema-Firewall-Retries: 1`
 - logged repair detail: `extra field stripped`
 

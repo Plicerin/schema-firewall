@@ -143,7 +143,8 @@ async function enforceSchema(schema, completionJson, originalBody, reqHeaders, r
   const { valid, errors } = validate(data, schema);
 
   if (valid) {
-    return { status: coercions.length ? 'coerced' : 'ok', errors: [], coercions, retries: retryCount, data, completion: completionJson };
+    const status = retryCount > 0 ? 'retried' : (coercions.length ? 'coerced' : 'ok');
+    return { status, errors: [], coercions, retries: retryCount, data, completion: completionJson };
   }
 
   // Failed — retry?
