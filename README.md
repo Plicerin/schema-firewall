@@ -47,6 +47,10 @@ X-Schema-Firewall-Retries: 0
 X-Schema-Firewall-Errors:  quantity: expected integer, got string  (only on failure)
 ```
 
+### Architecture diagram
+
+![SchemaFirewall architecture](./schema-firewall-diagram.png)
+
 ---
 
 ## Quickstart
@@ -220,6 +224,73 @@ Every enforcement event is appended to `~/.schema-firewall/proxy.jsonl`:
 ```
 
 This file is the foundation for a future dashboard. All the data is there — failures, coercions, retry counts, models, timing.
+
+---
+
+## Verified live against GitHub Copilot
+
+This is not only mock-tested. SchemaFirewall was run end-to-end against the real GitHub Copilot chat completions upstream using live traffic.
+
+### 1) Clean extraction
+
+Returned valid structured JSON through the proxy:
+
+```json
+{"item":"blue widgets","quantity":5,"price_cents":1299,"notes":"rush delivery"}
+```
+
+### 2) Coercion proof
+
+Proxy accepted a real upstream response where numeric fields arrived as strings, then repaired them:
+
+- `httpStatus: 200`
+- `X-Schema-Firewall-Status: coerced`
+- `X-Schema-Firewall-Retries: 0`
+- coercions logged:
+  - `quantity: coerced str→integer`
+  - `price_cents: coerced str→integer`
+
+Final returned content:
+
+```json
+{"item":"blue widgets","quantity":5,"price_cents":1299,"notes":"rush delivery please"}
+```
+
+### 3) Retry recovery proof
+
+Proxy detected an invalid response, retried upstream with schema errors injected, and returned a repaired result:
+
+- `httpStatus: 200`
+- `X-Schema-Firewall-Status: coerced`
+- `X-Schema-Firewall-Retries: 1`
+- logged repair detail: `extra field stripped`
+
+Final returned content:
+
+```json
+{"item":"keyboard","quantity":2,"price_cents":8999}
+```
+
+### 4) Strict failure proof
+
+Proxy rejected an impossible schema after exhausting retries:
+
+- `httpStatus: 422`
+- `X-Schema-Firewall-Status: failed`
+- `X-Schema-Firewall-Retries: 2`
+
+Returned error body:
+
+```json
+{"error":{"type":"schema_enforcement_failed","message":"LLM response did not match schema after all retry attempts","errors":["quantity: maximum 5, got 10"],"retries":2,"schema":"ImpossibleOrder"}}
+```
+
+### Copilot compatibility notes
+
+For GitHub Copilot-compatible upstreams, the proxy includes two small compatibility features:
+
+- optional prefix stripping via `SCHEMA_FIREWALL_STRIP_PREFIX=/v1`
+- forwarding IDE auth headers like `Editor-Version` and `Copilot-Integration-Id`
 
 ---
 
