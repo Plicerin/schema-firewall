@@ -1,0 +1,40 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SchemaFirewall logo">
+  <defs>
+    <linearGradient id="bg" x1="176" y1="128" x2="848" y2="896" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111B33"/>
+      <stop offset="1" stop-color="#17284B"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="316" y1="244" x2="708" y2="780" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5C8CFF"/>
+      <stop offset="1" stop-color="#6A47FF"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="390" y1="380" x2="640" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8EDBFF"/>
+      <stop offset="1" stop-color="#7CF0B2"/>
+    </linearGradient>
+    <filter id="shadow" x="180" y="150" width="664" height="748" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#0A1120" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+
+  <rect x="128" y="128" width="768" height="768" rx="176" fill="url(#bg)"/>
+
+  <g filter="url(#shadow)">
+    <path d="M512 212L730 292V468C730 630 641 772 512 836C383 772 294 630 294 468V292L512 212Z" fill="url(#shield)"/>
+    <path d="M512 248L694 315V468C694 610 618 734 512 791C406 734 330 610 330 468V315L512 248Z" fill="#0E1830" fill-opacity="0.18"/>
+  </g>
+
+  <path d="M430 374C383 398 354 443 354 497C354 551 383 596 430 620" stroke="#DCE7FF" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M594 374C641 398 670 443 670 497C670 551 641 596 594 620" stroke="#DCE7FF" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M434 529L490 585L614 442" stroke="url(#accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <circle cx="512" cy="212" r="14" fill="#8EDBFF" fill-opacity="0.8"/>
+  <circle cx="730" cy="292" r="14" fill="#8EDBFF" fill-opacity="0.8"/>
+  <circle cx="730" cy="468" r="14" fill="#8EDBFF" fill-opacity="0.8"/>
+  <circle cx="512" cy="836" r="14" fill="#7CF0B2" fill-opacity="0.85"/>
+  <circle cx="294" cy="468" r="14" fill="#8EDBFF" fill-opacity="0.8"/>
+  <circle cx="294" cy="292" r="14" fill="#8EDBFF" fill-opacity="0.8"/>
+
+  <path d="M512 212L730 292M730 292V468M294 292V468M512 836C641 772 730 630 730 468M512 836C383 772 294 630 294 468M294 292L512 212" stroke="#A9C4FF" stroke-opacity="0.18" stroke-width="10" stroke-linecap="round"/>
+</svg>
